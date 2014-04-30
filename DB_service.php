@@ -8,8 +8,11 @@
 
     function getAllDeviceTokens(){
     	$dataArray = $this->DB->Select('deviceAndStudent');
-        return $dataArray;
-
+    	$tokenArray =  array();
+    	foreach( $dataArray as &$row){
+           array_push($tokenArray, $row[ "deviceToken" ] );
+    	}
+    	 return $tokenArray;
     }
 
 
