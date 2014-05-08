@@ -15,7 +15,10 @@
     	 return $tokenArray;
     }
 
-    
+    function register($token , $OS, $studentID=""){
+    	$newMember = array('deviceToken' => $token, 'deviceType' => $OS , 'studentID' => $studentID);
+		    $this->DB->Insert($newMember,'deviceAndStudent');
+    }
 
 
 
