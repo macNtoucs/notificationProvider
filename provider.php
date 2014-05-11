@@ -68,6 +68,12 @@ body {
 	display: inline;
 }
 
+.words { 
+	color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-align:center; position: absolute;
+	margin: -150px 0 0 -150px;
+	display: inline;
+}
+
 input { 
 	width: 100%; 
 	margin-bottom: 10px; 
@@ -97,19 +103,73 @@ input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgb
 
 <body>
    <div class = "loginTittle">
-   		<h1>海大App全校廣播系統</h1>
+   		<h1>海大App全校廣播</h1>
    </div>
 
   <div  class="login">
    <form  method="POST" action="emergencyMsgProvider.php">
-    	<textarea id="msg" name="msg" placeholder="發布內容(35個中文字以下)" required="required" cols="30" rows="5"></textarea>
+    	<textarea id="content" name="msg" placeholder="發布內容(35個中文字以下)" required="required" cols="30" rows="5"></textarea>
        </br>
-        <button type="submit" class="btn btn-primary btn-block btn-large">發佈</button>
+       <span id="zifu">0</span> <br/>
+        <button type="submit" class="btn btn-primary btn-block btn-large" id="po">發佈</button>
     </form>
 </div>
 
   <script src="js/index.js"></script>
   
+<script language=javascript>
+function $a(id){return document.getElementById(id);}
+var EventUtil=function(){};
+EventUtil.addEventHandler=function(obj,EventType,Handler){
+	if(obj.addEventListener){obj.addEventListener(EventType,Handler,false);}
+    else if(obj.attachEvent){obj.attachEvent('on'+EventType,Handler);}
+    else{obj['on'+EventType]=Handler;}
+}
+
+if($a("content")){EventUtil.addEventHandler($a('content'),'propertychange',CountChineseCharacters);EventUtil.addEventHandler($a('content'),'input',CountChineseCharacters);}
+
+function showit(Word){alert(Word);}
+function CountChineseCharacters(){
+	Words=$a('content').value;
+	var W=new Object();
+	var Result=new Array();
+	var iNumwords=0;
+	var sNumwords=0;
+	var sTotal=0;
+	var iTotal=0;var eTotal=0;
+	var otherTotal=0;var bTotal=0;
+	var inum=0;
+	for(i=0;i<Words.length;i++){
+		var c=Words.charAt(i);
+		if(c.match(/[\u4e00-\u9fa5]/)){
+			if(isNaN(W[c])){iNumwords++;W[c]=1;}
+			iTotal++;
+			}
+		}
+	for(i=0;i<Words.length;i++){
+		var c=Words.charAt(i);
+		if(c.match(/[^\x00-\xff]/)){
+			if(isNaN(W[c])) {sNumwords++;}
+	   		 sTotal++;
+   		}else{eTotal++;}
+		if(c.match(/[0-9]/)){
+		inum++;
+	}
+
+	}
+		document.getElementById("zifu").innerHTML=iTotal*2+(sTotal-iTotal)*2+eTotal;
+		var totalWords = iTotal*2+(sTotal-iTotal)*2+eTotal;
+		if (totalWords > 70){
+		   document.getElementById("po").innerHTML = "內容過長  無法發佈";
+		   document.getElementById("po").disabled = true; 
+		}
+		else  {
+			document.getElementById("po").innerHTML = "發佈";
+			document.getElementById("po").disabled = false; 
+	    }
+	}
+</script>
+
 </body>
 
 </html>
