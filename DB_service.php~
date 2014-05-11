@@ -17,8 +17,7 @@
     	 return $tokenArray;
     }
    function getAllEmerDeviceTokens(){
-    	$dataArray = $this->DB->Select('deviceandstudent');
-        
+    	$dataArray = $this->DB->Select('deviceAndStudent');
     	$tokenArray =  array();
     	
     	foreach( $dataArray as &$row){

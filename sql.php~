@@ -256,7 +256,7 @@ class MySQL {
 		}
        
 		$query = substr($query, 0, -5);
-            //echo $query;
+            echo $query;
 		return $this->ExecuteSQL($query);
 	}
 

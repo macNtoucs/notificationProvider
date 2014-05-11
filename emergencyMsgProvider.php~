@@ -4,10 +4,10 @@
      /***prepare the request parameter***/
      //var $studentIDsArray = json_decode($POST["studentIDs"]);
       $notificationContent = $_POST['msg'];
-	// echo $notificationContent;
+	 echo $notificationContent;
 	 $dbHelper = new DB_service;
 	 $deviceToken = $dbHelper->getAllEmerDeviceTokens();
-        print_r($deviceToken);
+      //  print_r($deviceToken);
       
 
      /*start to push*/
