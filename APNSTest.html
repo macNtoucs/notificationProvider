@@ -1,0 +1,28 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>NTOULibrary</title>
+</head>
+<body>
+	<form method = "POST" action = "ApnsPush.php">
+		<a>deviceToken</a><input type = "text" name = "deviceToken[]" /><br/>
+		<a>deviceToken</a><input type = "text" name = "deviceToken[]" /><br/>
+		<a>deviceToken</a><input type = "text" name = "deviceToken[]" /><br/>
+		<a>alert</a><input type = "text" name = "alert" /><br/>
+		<a>badge</a><input type = "text" name = "badge"/><br/>
+		<a>content</a><input type = "text" name = "content"/><br/>
+		<a>moduleName</a>
+			<select name="moduleName">
+		      <option value="emergencyinfo">緊急聯絡</option>
+		      <option value="stellar">功課表</option>
+		      <option value="libraries">圖書館</option>
+        	</select><br/>
+		<a>sound</a>
+			<select name="sound">
+		      <option value="default">default</option>
+        	</select>
+		</br>
+		<input type = "submit" value = "submit"/>
+	</form>
+</body>
+</html>

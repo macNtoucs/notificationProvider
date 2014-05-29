@@ -1,0 +1,16 @@
+<?php    
+    include'DB_service.php';
+    session_start();
+    $account  = $_POST["u"];
+    $pwd = $_POST["p"];
+    $dbHelper = new DB_service;
+    $isValid = $dbHelper -> userValidator($account,$pwd);
+   echo $isValid;
+/*
+   if ($isValid == 'false'){
+    	$errMessage = "登入失敗";
+        echo "<script type='text/javascript'>alert('$errMessage');</script>";
+        header('location:login.php');
+    }
+    else { $_SESSION["ValidLogin"] = 'true'; header('location:provider.php');}*/
+?>
