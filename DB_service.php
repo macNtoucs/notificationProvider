@@ -89,7 +89,7 @@
 				}
 			}
                  
-                  else echo $sid.' -->  No any devices </br>';
+                 else echo $sid.' -->  No any devices </br>';
 		}
         
         return $tokenArray;
@@ -114,12 +114,37 @@
                               array ("pns" => $badgeCnt),
                               $par);
         }
+	 function getPNSBadge($token){
+		$par = array( "deviceToken" => $token );
+		$member = $this->DB->Select('badge',$par);
+		return $member['pns'];
+        }
 
 	function saveNotification ($msg, $type, $fromCourse){
 		    $newHis = array('content' => $msg, 'type' => $OS , 'fromcourse' => $fromCourse);
 		    $this->DB->Insert($newHis,'notificationhistory');
 		
 		}
+
+	function increaseCourseBadge($courseID, $deviceTokenArray){
+		foreach ($deviceTokenArray as $deviceToken){
+			$member = $this -> DB -> Select( 'badge' , array("deviceToken" => $deviceToken));
+			$courseBadgeArray = json_decode( $member['moodle'],true );
+			$chk = array_key_exists($courseID, $courseBadgeArray);
+
+			if ($chk == false){ //new course badge, should be insert a new one.
+				$courseBadgeArray [ $courseID ]= 1;
+				}
+			else{ //there has been a course, increase badge for this course
+				++$courseBadgeArray[ $courseID ] ;
+				}
+			$newCourseBadgeJson = json_encode($courseBadgeArray);
+
+			$this->DB->Update('badge',
+                              array ("moodle" => $newCourseBadgeJson),
+                              array("deviceToken" => $deviceToken));
+		}
+	}
 }
 
 php?>

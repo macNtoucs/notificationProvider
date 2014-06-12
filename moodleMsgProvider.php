@@ -8,7 +8,7 @@
 	
 	 $dbHelper = new DB_service;
 	
-
+       
 
 	 $alert = $notificationContent['sendMsg']; 
    	 $sound = "default";
@@ -23,18 +23,35 @@
 	    echo "------------------------------------------------------------------------------------------------------------------------------------</br></br>";
 	
          /*set badge according to this courseID and these tokens*/
-	$dbHelper -> increaseCourse($courseID, $deviceTokenArray);
+	$dbHelper -> increaseCourseBadge($notificationContent[ 'courseID' ], $deviceTokenArray);
        
 	//  print_r($deviceToken);
+	$bigBody = array();
+	foreach($deviceTokenArray as $deviceToken){
+		$badge = $dbHelper -> getPNSBadge($deviceToken);
+		$newBody = array(
+				array(
+				 'aps' => array(
+					    'alert' => $alert,
+					    'sound' => $sound,
+					    'badge' => $badge
+					),
+			   	'moduleName' => $moduleName,
+			   	'content' => $content
+					)
+			);
+		 //print_r($newBody);
+		 array_push( $bigBody,$newBody);
+	}
+    	// print_r($bigBody);
    	 $push = new Push($deviceTokenArray);
-  	 $body['aps'] = array(
+  	/* $body['aps'] = array(
             'alert' => $alert,
             'sound' => $sound,
             'badge' => (int)$badge //this badge is pns in deviceAndStudent table.
         );
  	 $body['moduleName'] = $moduleName;
-  	 $body['content'] = $content;
-   	//$push->pushData($body); 
-      //echo json_encode(array('B5704R2A' => 3, 'B5703N54' => 1));
+  	 $body['content'] = $content;*/
+   	$push->pushData($bigBody); 
 
  ?>

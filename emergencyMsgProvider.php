@@ -41,13 +41,7 @@
 	);
    print_r($bigBody);*/
 
-    $body['aps'] = array(
-            'alert' => $alert,
-            'sound' => $sound,
-            'badge' => (int)$badge
-        );
-   $body['moduleName'] = $moduleName;
-   $body['content'] = $content;
+   
  //  $push->pushData($body); 
 
  ?>
