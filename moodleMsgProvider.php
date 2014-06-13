@@ -1,14 +1,47 @@
 <?php
-    header("Content-Type: text/html; charset=utf-8");
-	include 'DB_service.php';	
-    var $dbHelper = new DB_service();
+	 include_once 'DB_service.php';
+     include_once "severAPI.php";
+     /***prepare the request parameter***/
+     //var $studentIDsArray = json_decode($POST["studentIDs"]);
+      $notificationContent =  json_decode ($_POST['notification'],true ); 
+	//print_r($notificationContent['toStudentIDs']);
+	
+	 $dbHelper = new DB_service;
+	
+       
 
+	 $alert = $notificationContent['sendMsg']; 
+   	 $sound = "default";
+  	 $badge = 1;
+    	 $moduleName = "stellar";
+  	 $content = $notificationContent[ 'courseID' ];
+   
 
-    var $studentIDsArray = json_decode($POST["studentIDs"]);
-    var $courseID = json_decode($POST["courseID"]);
-    var $alert = json_decode($POST["alert"]));
-    var $badge = json_decode($POST["badge"]));
-    var $content = json_decode($POST["content"]));
-    var $sound = json_decode($POST["default"]));
+         echo "push a [" . $content . "]  msg: ".$alert . "</br></br>Devices list:</br>";
+         echo "------------------------------------------------------------------------------------------------------------------------------------</br>"; 
+       $deviceTokenArray = $dbHelper->transSIDstoTokens($notificationContent['toStudentIDs']);
+	    echo "------------------------------------------------------------------------------------------------------------------------------------</br></br>";
+	
+         /*set badge according to this courseID and these tokens*/
+	$dbHelper -> increaseCourseBadge($notificationContent[ 'courseID' ], $deviceTokenArray);
+       
+	 // print_r($deviceTokenArray);
+	$bigBody = array();
+	foreach($deviceTokenArray as $deviceToken){
+		$badge = $dbHelper -> getPNSBadge($deviceToken);
+		$newBody = array(
+				'aps' => array(
+					    'alert' => $alert,
+					    'sound' => $sound,
+					    'badge' => $badge
+					),
+			   	'moduleName' => $moduleName,
+			   	'content' => $content					
+			);
+		 array_push( $bigBody,$newBody);
+	}
+   	 $push = new Push($deviceTokenArray);
 
+   	$push->pushData($bigBody); 
 
+ ?>

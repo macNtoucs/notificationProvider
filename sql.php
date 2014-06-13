@@ -133,7 +133,7 @@ class MySQL {
 		// Prepare Variables
 		$vars = $this->SecureData($vars);
 
-		$query = "INSERT INTO `{$table}` SET ";
+		$query = "INSERT INTO {$table} SET ";
 		foreach($vars as $key=>$value){
 			if(in_array($key, $exclude)){
 				continue;
@@ -182,7 +182,7 @@ class MySQL {
 			return false;
 		}
 
-		$query = "SELECT * FROM `{$from}` WHERE ";
+		$query = "SELECT * FROM {$from} WHERE ";
 
 		if(is_array($where) && $where != ''){
 			// Prepare Variables
@@ -236,7 +236,7 @@ class MySQL {
 
 		// SET
 
-		$query = "UPDATE `{$table}` SET ";
+		$query = "UPDATE {$table} SET ";
 
 		foreach($set as $key=>$value){
 			if(in_array($key, $exclude)){
@@ -256,10 +256,40 @@ class MySQL {
 		}
        
 		$query = substr($query, 0, -5);
-      // echo $query;
+          //  echo $query . "</br>";
 		return $this->ExecuteSQL($query);
-	}
+	} 
+        function UpdateTimestamp($table, $where , $exclude = ''){
+		// Catch Exceptions
+		if(trim($table) == ''  || !is_array($where)){
+			return false;
+		}
+		if($exclude == ''){
+			$exclude = array();
+		}
 
+		array_push($exclude, 'MAX_FILE_SIZE'); // Automatically exclude this one
+
+		$where 	= $this->SecureData($where);
+
+		
+
+		$query = "UPDATE {$table} SET `recentLoginTime` = NOW() ";
+
+
+		// WHERE
+
+		$query .= ' WHERE ';
+
+		foreach($where as $key=>$value){
+			$query .= "`{$key}` = '{$value}' AND ";
+		}
+       
+		$query = substr($query, 0, -5);
+           // echo $query;
+		return $this->ExecuteSQL($query);		
+
+	}
 	// 'Arrays' a single result
 	function ArrayResult(){
 		$this->arrayedResult = mysql_fetch_assoc($this->result) or die (mysql_error($this->databaseLink));
