@@ -44,6 +44,7 @@
 		    $this->DB->Insert($newMember,'deviceandstudent');
                 $newdeviceSetting = array ('deviceToken' => $token);
 		    $this->DB->Insert($newdeviceSetting,'devicesetting');
+		    $this->DB->Insert(array('deviceToken' => $token),'badge');
 		    $this-> getBadge($token);
 		     return;
 		}
