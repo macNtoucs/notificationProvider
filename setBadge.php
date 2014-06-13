@@ -3,8 +3,8 @@
      include_once "severAPI.php";
      /***prepare the request parameter***/
      //var $studentIDsArray = json_decode($POST["studentIDs"]);
-      $token = $_POST['token_SET'];
-	$newBadgeVal = $_POST['newBadgeVal'];
+      $token = $_GET['token_SET'];
+	$newBadgeVal = $_GET['newBadgeVal'];
  
 	 $dbHelper = new DB_service;
 	 $dbHelper->setPNSBadge($token , $newBadgeVal);

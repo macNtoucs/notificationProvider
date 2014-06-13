@@ -18,7 +18,7 @@
    $content = $notificationContent;
   
    $push = new Push($deviceTokenArray);
-
+   $dbHelper -> increaseEmerBadge();
   $bigBody = array();
 	foreach($deviceTokenArray as $deviceToken){
 		$badge = $dbHelper -> getPNSBadge($deviceToken);
@@ -33,7 +33,7 @@
 			);
 		 array_push( $bigBody,$newBody);
 	}  
-     $dbHelper -> increaseEmerBadge();
-     $push->pushData($bigBody); 
+      $push->pushData($bigBody); 
+     $dbHelper -> saveNotiMsg($notificationContent);
 
  ?>

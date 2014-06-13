@@ -125,11 +125,7 @@
 		return $member['pns'];
         }
 
-	function saveNotification ($msg, $type, $fromCourse){
-		    $newHis = array('content' => $msg, 'type' => $OS , 'fromcourse' => $fromCourse);
-		    $this->DB->Insert($newHis,'notificationhistory');
-		
-		}
+
 
 	function increaseCourseBadge($courseID, $deviceTokenArray){
 		foreach ($deviceTokenArray as $deviceToken){
@@ -158,6 +154,12 @@
                               array ("emergency" => ++$data['emergency'], 'pns' => ++$data['pns']),
                               array("deviceToken" => $data['deviceToken']));
 			}
+		}
+	function saveNotiMsg($msg){
+			$this->DB->Insert(
+				array('msg' => $msg),
+				'emerHistory'
+				);
 		}
 }
 
