@@ -100,7 +100,7 @@
 		$par = array( "deviceToken" => $token );
 		$res = $this -> DB -> Select('badge' , $par);
 		//print_r($res);
-		$badgeArray = array('emergency' => (int)$res['emergency'] , 'moodle' => (string)$res['moodle'] , 'library' => (int)$res['library']);
+		$badgeArray = array('emergencyinfo' => (int)$res['emergency'] , 'stellar' => (string)$res['moodle'] , 'libraries' => (int)$res['library']);
 		//print_r($badgeArray);
             $json = json_encode($badgeArray);
 		$json = str_replace("\\","",$json);
@@ -145,10 +145,19 @@
 			$newCourseBadgeJson = json_encode($courseBadgeArray);
 
 			$this->DB->Update('badge',
-                              array ("moodle" => $newCourseBadgeJson),
+                              array ("moodle" => $newCourseBadgeJson , 'pns' => ++$member['pns']),
                               array("deviceToken" => $deviceToken));
 		}
-	}
+	  }
+	function increaseEmerBadge(){
+		    $dataArray = $this->DB->Select('badge');
+		     print_r($dataArray);
+		    foreach($dataArray as $data){
+				$this->DB->Update('badge',
+                              array ("emergency" => ++$data['emergency'], 'pns' => ++$data['pns']),
+                              array("deviceToken" => $data['deviceToken']));
+			}
+		}
 }
 
 php?>

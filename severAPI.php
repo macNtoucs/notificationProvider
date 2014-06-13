@@ -37,17 +37,7 @@ class Push {
    public function pushData($bigBody)
     {
 
-          /* for ($i = 0; $i < count($this ->deviceToken); $i++){
-	      $body['aps'] = array(
-            'alert' => $bigBody[$i]['aps']['alert'],
-            'sound' => $bigBody[$i]['aps']['sound'],
-            'badge' => (int)$bigBody[$i]['aps']['badge'] //this badge is pns in deviceAndStudent table.
-      			  );
- 		 $body['moduleName'] = $bigBody[$i]['moduleName'];
-  		 $body['content'] = $bigBody[$i]['content'];
-		print_r($body);
-		}  */
-     $ctx = stream_context_create();
+       $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert',$this->localcert);
         stream_context_set_option($ctx, 'ssl', 'passphrase', $this->passphrase);
         

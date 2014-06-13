@@ -6,7 +6,7 @@
       $notificationContent = $_POST['msg'];
 	// echo $notificationContent;
 	 $dbHelper = new DB_service;
-	 $deviceToken = $dbHelper->getAllEmerDeviceTokens();
+	 $deviceTokenArray = $dbHelper->getAllEmerDeviceTokens();
       //  print_r($deviceToken);
       
 
@@ -17,31 +17,23 @@
    $moduleName = "emergencyinfo";
    $content = $notificationContent;
   
-   $push = new Push($deviceToken);
+   $push = new Push($deviceTokenArray);
 
-   /* $bigBody = array(
-        	),
-   	'moduleName' => $moduleName,
-   	'content' => $content
-		),
-	array(
-	 'aps' => array(
-            'alert' => $alert,
-            'sound' => $sound,
-            'badge' => (int)$badge
-	array(
-	 'aps' => array(
-            'alert' => $alert,
-            'sound' => $sound,
-            'badge' => (int)$badge
-        	),
-   	'moduleName' => $moduleName,
-   	'content' => $content
-		)
-	);
-   print_r($bigBody);*/
-
-   
- //  $push->pushData($body); 
+  $bigBody = array();
+	foreach($deviceTokenArray as $deviceToken){
+		$badge = $dbHelper -> getPNSBadge($deviceToken);
+		$newBody = array(
+				'aps' => array(
+					    'alert' => $alert,
+					    'sound' => $sound,
+					    'badge' => $badge
+					),
+			   	'moduleName' => $moduleName,
+			   	'content' => $content					
+			);
+		 array_push( $bigBody,$newBody);
+	}  
+     $dbHelper -> increaseEmerBadge();
+     $push->pushData($bigBody); 
 
  ?>

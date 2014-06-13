@@ -40,8 +40,8 @@
 			);
 		 array_push( $bigBody,$newBody);
 	}
-
    	 $push = new Push($deviceTokenArray);
-    	$push->pushData($bigBody); 
+
+   	$push->pushData($bigBody); 
 
  ?>
