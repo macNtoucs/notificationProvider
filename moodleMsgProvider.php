@@ -25,33 +25,23 @@
          /*set badge according to this courseID and these tokens*/
 	$dbHelper -> increaseCourseBadge($notificationContent[ 'courseID' ], $deviceTokenArray);
        
-	//  print_r($deviceToken);
+	 // print_r($deviceTokenArray);
 	$bigBody = array();
 	foreach($deviceTokenArray as $deviceToken){
 		$badge = $dbHelper -> getPNSBadge($deviceToken);
 		$newBody = array(
-				array(
-				 'aps' => array(
+				'aps' => array(
 					    'alert' => $alert,
 					    'sound' => $sound,
 					    'badge' => $badge
 					),
 			   	'moduleName' => $moduleName,
-			   	'content' => $content
-					)
+			   	'content' => $content					
 			);
-		 //print_r($newBody);
 		 array_push( $bigBody,$newBody);
 	}
-    	// print_r($bigBody);
+
    	 $push = new Push($deviceTokenArray);
-  	/* $body['aps'] = array(
-            'alert' => $alert,
-            'sound' => $sound,
-            'badge' => (int)$badge //this badge is pns in deviceAndStudent table.
-        );
- 	 $body['moduleName'] = $moduleName;
-  	 $body['content'] = $content;*/
-   	$push->pushData($bigBody); 
+    	$push->pushData($bigBody); 
 
  ?>

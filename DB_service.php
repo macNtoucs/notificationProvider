@@ -44,14 +44,15 @@
 		    $this->DB->Insert($newMember,'deviceandstudent');
                 $newdeviceSetting = array ('deviceToken' => $token);
 		    $this->DB->Insert($newdeviceSetting,'devicesetting');
-		    getBadge($token);
+		    $this-> getBadge($token);
 		     return;
 		}
            else{  //have registered
-       	    $newMemberdata = array('deviceType' => $OS , 'studentID' => $studentID);
+		   //  echo $token;
+       	   $newMemberdata = array('deviceType' => $OS , 'studentID' => $studentID);
 		    $this->DB->Update('deviceandstudent',$newMemberdata,array ('deviceToken' => $token));
 		    $this->DB->UpdateTimestamp('deviceandstudent',array ('deviceToken' => $token));
-		    getBadge($token);
+		    $this-> getBadge($token);
 		     return;
                 }
             
@@ -99,10 +100,13 @@
 		$par = array( "deviceToken" => $token );
 		$res = $this -> DB -> Select('badge' , $par);
 		//print_r($res);
-		$badgeArray = array('emergency' => (int)$res['emergency'] , 'moodle' => $res['moodle'] , 'library' => (int)$res['library']);
+		$badgeArray = array('emergency' => (int)$res['emergency'] , 'moodle' => (string)$res['moodle'] , 'library' => (int)$res['library']);
 		//print_r($badgeArray);
             $json = json_encode($badgeArray);
-            echo $json;
+		$json = str_replace("\\","",$json);
+		$json = str_replace('}"',"}",$json);
+		echo  str_replace('"{',"{",$json);
+           // echo $json;
 		$this->DB->Update('badge',
                               array ("emergency" => 0 , "moodle" => "" ,"library" => 0),
                               $par);

@@ -34,29 +34,49 @@ class Push {
     }
 
     // Put your private key's passphrase here:
-   public function pushData($body)
+   public function pushData($bigBody)
     {
 
-        $ctx = stream_context_create();
+          /* for ($i = 0; $i < count($this ->deviceToken); $i++){
+	      $body['aps'] = array(
+            'alert' => $bigBody[$i]['aps']['alert'],
+            'sound' => $bigBody[$i]['aps']['sound'],
+            'badge' => (int)$bigBody[$i]['aps']['badge'] //this badge is pns in deviceAndStudent table.
+      			  );
+ 		 $body['moduleName'] = $bigBody[$i]['moduleName'];
+  		 $body['content'] = $bigBody[$i]['content'];
+		print_r($body);
+		}  */
+     $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert',$this->localcert);
         stream_context_set_option($ctx, 'ssl', 'passphrase', $this->passphrase);
         
         // Open a connection to the APNS server
-        //这个为正是的发布地址
-         //$fp = stream_socket_client(“ssl://gateway.push.apple.com:2195“, $err, $errstr, 60, //STREAM_CLIENT_CONNECT, $ctx);
-        //这个是沙盒测试地址，发布到appstore后记得修改哦
+        //$fp = stream_socket_client(“ssl://gateway.push.apple.com:2195“, $err, $errstr, 60, //STREAM_CLIENT_CONNECT, $ctx);
+      
         $fp = stream_socket_client(
         'ssl://gateway.sandbox.push.apple.com:2195', $err,
         $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
-
+	
+           
         if (!$fp)
         exit("Failed to connect: $err $errstr" . PHP_EOL);
 
         echo 'Connected to APNS' . PHP_EOL;
 
-        // 创建消息
-        $payload =json_encode($body);
+        // 消息
+       // $payload =json_encode($body);
         for ($i = 0; $i < count($this ->deviceToken); $i++){
+	    $body['aps'] = array(
+            'alert' => $bigBody[$i]['aps']['alert'],
+            'sound' => $bigBody[$i]['aps']['sound'],
+            'badge' => (int)$bigBody[$i]['aps']['badge'] //this badge is pns in deviceAndStudent table.
+      			  );
+ 		 $body['moduleName'] = $bigBody[$i]['moduleName'];
+  		 $body['content'] = $bigBody[$i]['content'];
+		//print_r($body);
+               
+             $payload =json_encode($body);
             // Build the binary notification
             $msg = chr(0) . pack('n', 32) . pack('H*', $this ->deviceToken[$i]) . pack('n', strlen($payload)) . $payload;
             // Send it to the server
