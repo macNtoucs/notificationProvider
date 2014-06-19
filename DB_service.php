@@ -76,16 +76,27 @@
 
 	function transSIDstoTokens($sidsArray){
 	  $tokenArray =  array(); 
-        foreach ($sidsArray as $sid){
-			
+        foreach ($sidsArray as $sid){    		
+    	
 			$devAndSidData = $this -> DB -> Select('deviceandstudent' , array('studentID' => $sid));
 			//print_r(count($devAndSidData));
 		     if (count($devAndSidData) ==6 ) {
+				
+		    		$filter = array('deviceToken' => $devAndSidData ['deviceToken']); /*filter check*/
+		    		$canPush = $this->DB->Select('devicesetting',$filter);		    		
+				if ($canPush[ 'moodle' ] !=1) continue;
+				//print_r($filter);
 				array_push($tokenArray ,$devAndSidData[ 'deviceToken' ]);
 					echo $sid.' -->  '. $devAndSidData[ 'deviceToken' ] .'</br>';			
 				}
                  else if (count($devAndSidData) >= 2 ) {
+
 				foreach ($devAndSidData as $_sid){
+					
+					$filter = array('deviceToken' => $_sid['deviceToken']); /*filter check*/
+			    		$canPush = $this->DB->Select('devicesetting',$filter);		    		
+					if ($canPush[ 'moodle' ] !=1) continue;
+					//print_r($filter);
 					array_push($tokenArray , $_sid[ 'deviceToken' ]);
 					echo $sid.' -->  '. $_sid[ 'deviceToken' ] .'</br>';					
 				}
@@ -160,6 +171,11 @@
 				array('msg' => $msg),
 				'emerHistory'
 				);
+		}
+	function getLatestEmergency(){
+			$history = $this -> DB -> Select('emerHistory');
+		         if( $history[ count($history)-1 ]['msg'] ) echo  $history[ count($history)-1 ]['msg'] ;
+				else  echo  $history['msg'] ;
 		}
 }
 
